@@ -6,60 +6,63 @@ use itertools::Itertools;
 
 type InfectionMatrix = Vec<Vec<bool>>;
 
-type ExhaustiveSearchResults = HashMap<usize, Vec<(String, String, usize)>>;
-
-// output is a hashmap of cocktail size to a vector of tuples of (phage name, bacteria name, number of bacteria killed)
+type ExhaustiveSearchResults = HashMap<usize, Vec<((Vec<usize>, Vec<usize>))>>;
+// output is a hashmap of cocktail size to a vector of tuples of (cocktail, bacteria killed)
 
 pub fn exhaustive_search(
-    matrix: &InfectionMatrix,
-    phage_map: &HashMap<&str, usize>,
-    bacteria_map: &HashMap<&str, usize>,
+    matrix: &InfectionMatrix
     // limit: usize - include later
 ) -> Option<ExhaustiveSearchResults>
  {
     let mut result: ExhaustiveSearchResults = HashMap::new();
 
     let max_phages = matrix.len();
-    // let max_bacteria = matrix[0].len();
-
-    // steps
-    // loop for all phage cocktail sizes from 1 to max
-    // check all possible combinations in that cocktail size, and output the one that kills the most bacteria (may have multiple with same number of bacteria killed)
-    // add result to hashmap
-    // return hashmap
-    // handle if no combination kills any bacteria
+    let max_bacteria = matrix[0].len();
 
     for size in 1..max_phages+1 {
         let combinations = (0..max_phages).combinations(size);
 
         for combination in combinations {
             let mut max_bacteria_killed = 0;
-            let mut best_cocktail = Vec::new();
+            let mut best_bacteria_indices = Vec::new();
+            let mut best_phage_indices = Vec::new();
+            let mut best_cocktails = Vec::new(); // store all best cocktails, contains vector
 
-            for bacteria in 0..matrix[0].len() {
-                let mut bacteria_killed = 0;
-                for phages in combination {
+            for bacteria in max_bacteria {
+                let mut num_bacteria_killed = 0;
+                let mut killed_bacteria_indices = Vec::new();
+
+                for phages in &combination {
                     if matrix[bacteria][phages] {
                         bacteria_killed += 1;
+                        killed_bacteria_indices.push(phages);xscz
                     }
                 }
+
                 if bacteria_killed > max_bacteria_killed {
                     max_bacteria_killed = bacteria_killed;
-                    best_cocktail = combination;
+                    best_cocktails.clear(); // Clear previous bests
+                    best_phage_indices = combination.clone();
+                    best_bacteria_indices = killed_bacteria_indices;
+                    best_cocktails.push((best_phage_indices, best_bacteria_indices));
+
+                } else if bacteria_killed == max_bacteria_killed {
+                    best_phage_indices = combination.clone();
+                    best_bacteria_indices = killed_bacteria_indices;
+                    best_cocktails.push((best_phage_indices, best_bacteria_indices));
                 }
             }
-        // need to find names of phages in best cocktail from using indices 
-        // need to find names of bacteria in best cocktail from using indices
-        // add to result hashmap - add cocktail size as key, vector of tuples (phage name, bacteria name, bacteria killed) as value
+            result.insert(size, best_cocktails);
         }
     }
-
+    Some(result)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+            
     #[test]
     fn test_exhaustive_search() {
         
