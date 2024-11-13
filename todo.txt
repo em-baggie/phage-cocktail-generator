@@ -1,0 +1,22 @@
+
+psuedocode
+
+declare hashmap for results
+declare max phage num
+declare max bacteria num
+
+for each possible size of phage  
+    get the combinations
+    declare max bacteria killed by the size = 0
+    for each combination
+        declare bacteria killed by combination = 0
+        declare tempvec of bacteria indexes killed
+        check how many bacteria they can kill in total, keep count and if kill save the index to tempvec
+
+        if the number is > than the current max for size, replace it with that and save the combination to tempvec and the killed bacterai to tempvec
+        else if the number is = to the current max, save the combination to tempvec
+
+    add the tempvec for combintion and bacteria to results vector
+    if max bacteria killed by the size == max bacteria then stop
+    push (vec, count)
+
