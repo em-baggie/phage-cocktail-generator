@@ -1,22 +1,25 @@
+To make an iterator
+into_iter() - gets iterator of elements of type T by taking ownership
+.iter() - gets iterator of elements of type &T by borrowing
+.iter_mut() - gets iterator of elements of type &mut T by borrowing
 
-psuedocode
+Common iterator adapters
+.map() - applies a function to each element of the iterator and returns a new iterator with the results
 
-declare hashmap for results
-declare max phage num
-declare max bacteria num
+.filter() - filters elements of the iterator based on a predicate and returns a new iterator with the results
 
-for each possible size of phage  
-    get the combinations
-    declare max bacteria killed by the size = 0
-    for each combination
-        declare bacteria killed by combination = 0
-        declare tempvec of bacteria indexes killed
-        check how many bacteria they can kill in total, keep count and if kill save the index to tempvec
+.take() - takes the first n elements from the iterator and returns a new iterator with the results
 
-        if the number is > than the current max for size, replace it with that and save the combination to tempvec and the killed bacterai to tempvec
-        else if the number is = to the current max, save the combination to tempvec
+.collect() - collects the elements of the iterator into a collection such as a vector, array, or hash map
 
-    add the tempvec for combintion and bacteria to results vector
-    if max bacteria killed by the size == max bacteria then stop
-    push (vec, count)
+.fold() - applies a function to each element of the iterator and returns a single value
 
+.any() - returns true if any element of the iterator satisfies a predicate
+
+.all() - returns true if all elements of the iterator satisfy a predicate
+
+.get() - gets the element at the given index
+
+.count() - counts the number of elements in the iterator
+
+.max() - finds the maximum element of the iterator

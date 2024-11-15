@@ -1,5 +1,4 @@
 // cols are phages, rows are bacteria
-
 use itertools::Itertools;
 use std::collections:: {HashMap, HashSet};
 
@@ -14,35 +13,50 @@ pub fn exhaustive_search(
     // limit: usize - include later
 ) -> Option<ExhaustiveSearchResults>
  {
+    // early exit if no combinations can be made
     if matrix.is_empty() {
-        return None; // Return None if no combinations can be made
+        return None; 
     }
 
     let mut result: ExhaustiveSearchResults = HashMap::new();
 
-    for size in 1..max_phages + 1 { // iterate through all possible cocktail sizes
-        let combinations = (0..max_phages).combinations(size); // for each size get all possible combinations of phages
-        println!("{:?}", combinations);
+    // loop through all possible sizes of phage cocktail
+    for size in 1..max_phages + 1 { 
 
-        // below is not including multiple combinations of same size that kill the same max bacteria
-        let best_cocktail = combinations
+        // for each size get all possible combinations of phages
+        let combinations = (0..max_phages).combinations(size);
+
+        // 1. find (combination, killed_bacteria)
+        let all_results: Vec<_> = combinations
             .map(|combination| {
+                // find the number of unique bacteria killed by each combination
                 let killed_bacteria: HashSet<_> = (0..max_bacteria)
                     .filter(|&bacteria| {
                         combination.iter().any(|&phage| {
-                            matrix.get(&(bacteria, phage)).map_or(false, |&is_infected| is_infected)
+                            matrix.get(&(bacteria, phage)) == Some(&true)
                         })
                     })
                     .collect();
                 (combination, killed_bacteria.len())
             })
-            .max_by_key(|&(_, count)| count);
+            .collect();
+        
+        // 2. find the max killed bacteria count
+        let max_killed_bacteria = all_results.iter().map(|(_, count)| *count).max().unwrap_or(0);
 
-        if let Some((best_combination, killed_bacteria_count)) = best_cocktail {
-            result.insert(size, vec![best_combination]);
-            if killed_bacteria_count == max_bacteria {
-                return Some(result);
-            }
+        // 3. find all combinations that have this max killed bacteria count
+        let best_cocktails: Vec<_> = all_results
+        .into_iter()
+        .filter(|&(_, count)| count == max_killed_bacteria)
+        .map(|(cocktail, _)| cocktail)
+        .collect();
+
+        // 4. add the best cocktails to the result
+        result.insert(size, best_cocktails);
+
+        // 5. if the max killed bacteria count is the same as the number of bacteria, return the result (early exit)
+        if max_killed_bacteria == max_bacteria {
+            return Some(result);
         }
     }
     Some(result)
