@@ -1,7 +1,4 @@
-// phage map refers to mapping of phage names to their indices in the inner vectors of the matrix
-// bacteria map refers to mapping of bacteria names to their indices in the outer vectors of the matrix
 // cols are phages, rows are bacteria
-
 
 use itertools::Itertools;
 use std::collections:: {HashMap, HashSet};
@@ -39,10 +36,10 @@ pub fn exhaustive_search(
                     .collect();
                 (combination, killed_bacteria.len())
             })
-            .max_by_key(|&(_, count)| count); // Find the combination that kills the most unique bacteria
+            .max_by_key(|&(_, count)| count);
 
         if let Some((best_combination, killed_bacteria_count)) = best_cocktail {
-            result.insert(size, vec![best_combination]); // Store the best combination
+            result.insert(size, vec![best_combination]);
             if killed_bacteria_count == max_bacteria {
                 return Some(result);
             }
