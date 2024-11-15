@@ -4,12 +4,13 @@ use std::collections:: {HashMap, HashSet};
 
 type InfectionMatrix = HashMap<(usize, usize), bool>; // (bacteria, phage) -> is infected
 
-type ExhaustiveSearchResults = HashMap<usize, Vec<Vec<usize>>>;
+type ExhaustiveSearchResults = HashMap<usize, (usize, Vec<Vec<usize>>)>;
 // output is a hashmap of cocktail size as key to a vector of best cocktail)
 pub fn exhaustive_search(
     matrix: &InfectionMatrix, 
     max_phages: usize,
     max_bacteria: usize,
+    limit: usize,
     // limit: usize - include later
 ) -> Option<ExhaustiveSearchResults>
  {
@@ -21,7 +22,7 @@ pub fn exhaustive_search(
     let mut result: ExhaustiveSearchResults = HashMap::new();
 
     // loop through all possible sizes of phage cocktail
-    for size in 1..max_phages + 1 { 
+    for size in 1..=limit { 
 
         // for each size get all possible combinations of phages
         let combinations = (0..max_phages).combinations(size);
@@ -52,7 +53,7 @@ pub fn exhaustive_search(
         .collect();
 
         // 4. add the best cocktails to the result
-        result.insert(size, best_cocktails);
+        result.insert(size, (max_killed_bacteria, best_cocktails));
 
         // 5. if the max killed bacteria count is the same as the number of bacteria, return the result (early exit)
         if max_killed_bacteria == max_bacteria {
@@ -80,18 +81,19 @@ mod tests {
             ((2,2), true),
         ]);
 
-        let result = exhaustive_search(&matrix, 3, 3);
+        let result = exhaustive_search(&matrix, 3, 3, 3);
 
         println!("{:?}", result);
         assert_eq!(
             result,
-            Some(HashMap::from([(1, vec![vec![2]])])));
+            Some(HashMap::from([(1, (3, vec![vec![2]]))]))
+        );
     }
     
     #[test]
     fn test_empty_matrix() {
         let matrix = HashMap::from([]);
-        let result = exhaustive_search(&matrix, 0, 0);
+        let result = exhaustive_search(&matrix, 0, 0, 3);
         assert_eq!(result, None);
     }
 
@@ -146,7 +148,7 @@ mod tests {
             ]);
 
 
-        let result = exhaustive_search(&matrix, 9, 5);
+        let result = exhaustive_search(&matrix, 9, 5, 9);
         println!("{:?}", result);
     }
 }
