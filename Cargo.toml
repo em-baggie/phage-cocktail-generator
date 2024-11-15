@@ -9,3 +9,4 @@ path = "src/lib.rs"
 
 [dependencies]
 itertools = "0.13.0"  # or the latest version
+calamine = "0.26.1"
