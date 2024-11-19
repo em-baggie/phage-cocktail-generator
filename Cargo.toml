@@ -1,12 +1,6 @@
-[package]
-name = "phage-cocktail"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-[lib]
-name = "phage_cocktail"  
-path = "src/lib.rs"     
-
-[dependencies]
-itertools = "0.13.0"  # or the latest version
-calamine = "0.26.1"
+members = [
+    "searcher",
+    "search",
+]

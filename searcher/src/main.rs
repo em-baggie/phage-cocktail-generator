@@ -1,4 +1,4 @@
-mod utils;
+use search::utils;
 
 fn main() {
     let excel_data = utils::excel_parser::read_excel("./all_host_range.xlsx", "test", (0, 0), (38, 55)).unwrap();

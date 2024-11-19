@@ -1,4 +1,10 @@
 // cols are phages, rows are bacteria
+// ways to increase speed:
+// cache results of killed bacteria for each combination
+// prune combinations that cannot possibly be the best
+// multi threading
+// use a more efficient data structure for the matrix/result
+
 use itertools::Itertools;
 use std::collections:: {HashMap, HashSet};
 
