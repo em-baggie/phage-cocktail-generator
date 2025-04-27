@@ -1,7 +1,7 @@
 [workspace]
 
 members = [
-    "data-parser",
+    "data-parser", "graph_generator",
     "phage-cocktail-generator",
     "search-methods",
 ]

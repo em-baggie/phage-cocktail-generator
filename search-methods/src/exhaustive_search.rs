@@ -4,6 +4,7 @@
 // prune combinations that cannot possibly be the best
 // multi threading
 // use a more efficient data structure for the matrix/result
+// assumes non empty matrix
 
 use itertools::Itertools;
 use std::collections:: {HashMap, HashSet};
@@ -21,6 +22,7 @@ pub fn exhaustive_search(
 ) -> Option<ExhaustiveSearchResults>
  {
     // early exit if no combinations can be made
+    // add this check to parser
     if matrix.is_empty() {
         return None; 
     }

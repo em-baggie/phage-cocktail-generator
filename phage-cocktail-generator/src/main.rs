@@ -1,3 +1,6 @@
+//TODO:
+// command line interface for interacting with phage cocktail generator - ?use clap?
+
 fn main() {
     //testing
     // let excel_data = utils::excel_parser::read_excel("./all_host_range.xlsx", "test", (0, 0), (38, 55)).unwrap();
