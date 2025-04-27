@@ -1,0 +1,8 @@
+[package]
+name = "phage-cocktail-generator"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+search-methods = { path = "../search-methods" }
+data-parser = { path = "../data-parser" }

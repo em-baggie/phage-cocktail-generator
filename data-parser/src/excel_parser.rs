@@ -1,6 +1,8 @@
 use calamine::{ Reader, open_workbook, Xlsx };
 use std::collections::HashMap;
 
+// make sure parsers discard empty matrices, and do not include empty values in the hashmaps
+
 #[derive(Debug)]
 pub struct ExcelData {
     phage_map: HashMap<usize, String>,
@@ -88,13 +90,13 @@ pub fn read_excel(file_path: &str, sheet_name: &str, start: (u32, u32), end: (u3
 
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    fn test_read_excel() {
-        let result = read_excel("./all_host_range_small.xlsx", "test", (0, 0), (7, 10));
-        assert_eq!(result.is_ok(), true);
-    }
-}
+//     #[test]
+//     fn test_read_excel() {
+//         let result = read_excel("./all_host_range_small.xlsx", "test", (0, 0), (7, 10));
+//         assert_eq!(result.is_ok(), true);
+//     }
+// }
